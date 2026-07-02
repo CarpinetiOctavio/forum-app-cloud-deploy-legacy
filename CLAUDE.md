@@ -44,18 +44,26 @@ forum-app-cloud-deploy/
 │   ├── tests/
 │   │   ├── services/                # Unit tests
 │   │   └── mocks/                   # Test mocks
+│   ├── .env.example                 # Local env var reference (DATABASE_PATH, PORT)
 │   └── Dockerfile                   # Multi-stage build
 ├── frontend/
 │   ├── src/
 │   ├── cypress/                     # E2E tests
+│   ├── .env.example                 # Local env var reference (REACT_APP_API_URL)
+│   ├── docker-entrypoint.sh         # Runtime REACT_APP_API_URL injection (see ADR-006)
 │   └── Dockerfile                   # Multi-stage build
 ├── .github/
 │   └── workflows/
 │       └── ci.yml                   # Full CI/CD pipeline
 ├── docs/
 │   ├── rules/                       # AI assistant operating instructions
-│   └── decisions/                   # Architecture Decision Records (ADR)
+│   ├── decisions/                   # Architecture Decision Records (ADR-001 to ADR-008)
+│   ├── diagrams/                    # Pipeline and architecture diagrams (SVG)
+│   ├── screenshots/                 # App and pipeline screenshots
+│   ├── SETUP.md                     # Infrastructure setup guide
+│   └── COMMANDS.md                  # Command reference for local development and demos
 ├── sonar-project.properties
+├── LICENSE
 └── README.md
 ```
 
@@ -133,6 +141,10 @@ docker build -t forum-frontend ./frontend
 - `docs/decisions/ADR-002-hosting.md` — why Render
 - `docs/decisions/ADR-003-image-tagging.md` — why commit SHA and not latest
 - `docs/decisions/ADR-004-cicd-tool.md` — why GitHub Actions
+- `docs/decisions/ADR-005-sqlite-persistence.md` — SQLite persistence strategy for containerized deploys
+- `docs/decisions/ADR-006-frontend-runtime-config.md` — runtime injection of `REACT_APP_API_URL` via entrypoint placeholder replacement
+- `docs/decisions/ADR-007-deployment-issues.md` — issues found and fixed during the first end-to-end pipeline run, including a hardcoded Render API key
+- `docs/decisions/ADR-008-spanish-test-descriptions.md` — why Spanish test descriptions are kept as-is with English comments added above them
 
 ---
 
@@ -156,6 +168,10 @@ Read every file in `docs/decisions/`:
 2. `docs/decisions/ADR-002-hosting.md`
 3. `docs/decisions/ADR-003-image-tagging.md`
 4. `docs/decisions/ADR-004-cicd-tool.md`
+5. `docs/decisions/ADR-005-sqlite-persistence.md`
+6. `docs/decisions/ADR-006-frontend-runtime-config.md`
+7. `docs/decisions/ADR-007-deployment-issues.md`
+8. `docs/decisions/ADR-008-spanish-test-descriptions.md`
 
 ### Step 3 — Analyze the full repository
 

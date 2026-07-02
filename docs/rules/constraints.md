@@ -51,11 +51,13 @@ This file defines hard constraints for the forum-app-cloud-deploy project. These
 
 ---
 
-## Pending items — do not implement without explicit instruction
+## Resolved items — previously tracked as pending
 
-- SonarCloud project reconfiguration for the new repository (organization and project key must be updated).
-- Database persistence strategy for containerized SQLite (volume mounting vs. migration to a hosted database).
-- Frontend environment variable for backend URL in containerized context (`REACT_APP_API_URL`).
+All three items previously tracked here are resolved:
+
+- ✅ SonarCloud project reconfiguration for the new repository — `sonar-project.properties` is configured with `sonar.projectKey=CarpinetiOctavio_forum-app-cloud-deploy` and `sonar.organization=carpinetioctavio`.
+- ✅ Database persistence strategy for containerized SQLite — see `docs/decisions/ADR-005-sqlite-persistence.md`.
+- ✅ Frontend environment variable for backend URL in containerized context (`REACT_APP_API_URL`) — see `docs/decisions/ADR-006-frontend-runtime-config.md`.
 
 ---
 

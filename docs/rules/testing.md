@@ -12,11 +12,11 @@ The test suite was established in forum-app-qa-pipeline and must be preserved ex
 
 | Layer | Tool | Tests | Coverage |
 |-------|------|-------|----------|
-| Backend unit tests | Go testing | 35 tests | 86.5% |
-| Frontend unit tests | Jest | 39 tests | 92.44% |
+| Backend unit tests | Go testing | 47 tests | 97.3% |
+| Frontend unit tests | Jest | 47 tests | 97.64% |
 | E2E tests | Cypress | 15 tests | — |
 | Static analysis | SonarCloud | — | Quality Gate: PASSED |
-| **Total** | | **89 tests** | |
+| **Total** | | **109 tests** | |
 
 ---
 
@@ -77,8 +77,8 @@ These thresholds are enforced in the pipeline and must not be lowered:
 
 | Layer | Minimum | Current |
 |-------|---------|---------|
-| Backend | 70% | 86.5% |
-| Frontend | 70% | 92.44% |
+| Backend | 70% | 97.3% |
+| Frontend | 70% | 97.64% |
 
 ---
 

@@ -48,11 +48,10 @@ Each stage must complete successfully before the next one starts. A failure at a
 
 ### Stage 3 — SonarCloud static analysis
 
-- Uses `SonarSource/sonarcloud-github-action`
+- Uses `SonarSource/sonarqube-scan-action@v5.0.0`
 - Requires `SONAR_TOKEN` secret (repository-level)
 - Configuration in `sonar-project.properties` — must be updated for the new repository before this stage runs
 - Pipeline aborts if SonarCloud Quality Gate fails
-- **Pending:** `sonar-project.properties` must be reconfigured for `CarpinetiOctavio/forum-app-cloud-deploy`. Code must analyze the existing file and report what needs to change before modifying it.
 
 ### Stage 4 — Cypress E2E tests
 

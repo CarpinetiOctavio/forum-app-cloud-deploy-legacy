@@ -9,22 +9,26 @@
 **Year:** 2025
 
 Full-stack forum application containerized and deployed to the cloud with a complete CI/CD pipeline. This project builds on [forum-app-qa-pipeline](https://github.com/CarpinetiOctavio/forum-app-qa-pipeline), extending it with Docker containerization, a container registry, and automated deployment to QA and production environments on Render via GitHub Actions.
+
 ---
 
 ## Table of Contents
 
 1. [Project Description](#project-description)
-2. [Tech Stack](#tech-stack)
-3. [Prerequisites](#prerequisites)
-4. [Installation](#installation)
-5. [Running the Project](#running-the-project)
-6. [Running Tests](#running-tests)
-7. [Quality Tools](#quality-tools)
-8. [CI/CD Pipeline](#cicd-pipeline)
-9. [Docker & Cloud Deploy](#docker--cloud-deploy)
-10. [Project Structure](#project-structure)
-11. [Troubleshooting](#troubleshooting)
-12. [Metrics](#metrics)
+2. [Live Environments](#live-environments)
+3. [App Screenshots](#app-screenshots)
+4. [Pipeline & Infrastructure](#pipeline--infrastructure)
+5. [Tech Stack](#tech-stack)
+6. [Prerequisites](#prerequisites)
+7. [Installation](#installation)
+8. [Running the Project](#running-the-project)
+9. [Running Tests](#running-tests)
+10. [Quality Tools](#quality-tools)
+11. [CI/CD Pipeline](#cicd-pipeline)
+12. [Docker & Cloud Deploy](#docker--cloud-deploy)
+13. [Project Structure](#project-structure)
+14. [Troubleshooting](#troubleshooting)
+15. [Metrics](#metrics)
 
 ---
 
@@ -37,8 +41,7 @@ A mini social network built with React (frontend) and Go (backend) that implemen
 - Comment system on posts
 - Permission validation (only the author can delete their own content)
 
-This repository represents the full deployment lifecycle of the application: from local development through automated testing, static analysis, containerization, and cloud deployment across QA and production environments.
-
+This project is the third in a series. forum-app-ci-testing established the unit testing foundation and GitHub Actions integration. forum-app-qa-pipeline extended that with code coverage gates, static analysis, and E2E testing. This repository adds Docker containerization, a container registry, and automated deployment to QA and production environments on Render.
 ---
 
 ## Live Environments
@@ -49,6 +52,70 @@ This repository represents the full deployment lifecycle of the application: fro
 | PROD | https://forum-frontend-prod.onrender.com | https://forum-backend-prod.onrender.com |
 
 > **Note:** Services run on Render's free tier. If inactive for 15+ minutes, the first request may take up to 60 seconds while the container restarts.
+
+---
+
+## App Screenshots
+
+### Authentication
+
+![Login](docs/screenshots/1-app-login.png)
+
+![Register](docs/screenshots/2-app-register.png)
+
+### Forum
+
+![Initial feed](docs/screenshots/3-app-initial-feed.png)
+
+![Post feed](docs/screenshots/5-app-feed.png)
+
+![Post detail](docs/screenshots/6-app-post-view.png)
+
+![Example post](docs/screenshots/4-app-example-of-post.png)
+
+### Validations
+
+![Fill title field](docs/screenshots/7-app-validation-fill-title-field.png)
+
+![Fill comment section](docs/screenshots/8-app-validation-fill-comment-section.png)
+
+![Duplicate email](docs/screenshots/9-app-validation-duplicate-email.png)
+
+![Invalid credentials](docs/screenshots/10-app-validation-invalid-credentials.png)
+
+> The "invalid credentials" message is intentionally generic — it does not reveal whether the email exists, which is a standard security practice.
+
+---
+
+## Pipeline & Infrastructure
+
+### Pipeline flow — stage order and quality gates
+
+![CI/CD pipeline flow](docs/diagrams/cicd_pipeline_flow.svg)
+
+### Job structure — parallelism
+
+Backend and frontend unit tests run in parallel. SonarCloud and Cypress wait for both to complete before starting, and also run in parallel with each other. Docker build only starts after all four quality gates pass.
+
+![Pipeline job structure](docs/diagrams/pipeline_job_structure.svg)
+
+### Artifact flow — Local → Registry → QA → PROD
+
+A single Docker image is built once and promoted through environments. The approval gate exists so that PROD deployment is a deliberate decision — the image is ready when the code passes, but it ships when the moment is right.
+
+![Environment and artifact flow](docs/diagrams/environment_artifact_flow.svg)
+
+### Pipeline in action
+
+![Pipeline green](docs/screenshots/11-pipeline-green.png)
+
+![Pipeline awaiting PROD approval](docs/screenshots/12-pipeline-awaiting-PROD-approval.png)
+
+![Pipeline approval gate](docs/screenshots/13-pipeline-approval-gate.png)
+
+### SonarCloud quality gate
+
+![SonarCloud quality gate](docs/screenshots/14-sonarcloud-quality-gate.png)
 
 ---
 
@@ -71,21 +138,18 @@ This repository represents the full deployment lifecycle of the application: fro
 ## Prerequisites
 
 ```bash
-# Verify installed versions:
 go version     # 1.24 or higher
-node --version # 20 or higher
+node --version # 22 or higher
 npm --version  # 10 or higher
-docker --version # any recent version
+docker --version
 ```
 
 **Installing Go:**
 ```bash
 # macOS
 brew install go
-
 # Ubuntu/Debian
 sudo apt install golang-go
-
 # Windows: https://go.dev/dl/
 ```
 
@@ -93,11 +157,9 @@ sudo apt install golang-go
 ```bash
 # macOS
 brew install node
-
 # Ubuntu/Debian
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
 sudo apt-get install -y nodejs
-
 # Windows: https://nodejs.org/
 ```
 
@@ -105,237 +167,131 @@ sudo apt-get install -y nodejs
 
 ## Installation
 
-### 1. Clone the Repository
-
 ```bash
 git clone https://github.com/CarpinetiOctavio/forum-app-cloud-deploy.git
 cd forum-app-cloud-deploy
-```
 
-### 2. Install Backend Dependencies
-
-```bash
-cd backend
-go mod download
-cd ..
-```
-
-### 3. Install Frontend Dependencies
-
-```bash
-cd frontend
-npm install
-cd ..
+cd backend && go mod download && cd ..
+cd frontend && npm install && cd ..
 ```
 
 ---
 
 ## Running the Project
 
-### Option 1: Manual (recommended for local development)
-
 **Terminal 1 — Backend:**
 ```bash
 cd backend
 go run cmd/api/main.go
-```
-
-Backend runs at `http://localhost:8080`. Expected output:
-```
-Server running at http://localhost:8080
-Database initialized
+# Runs at http://localhost:8080
 ```
 
 **Terminal 2 — Frontend:**
 ```bash
 cd frontend
 npm start
-```
-
-Frontend runs at `http://localhost:3000` and opens automatically in the browser.
-
-### Option 2: Build and Run
-
-**Backend:**
-```bash
-cd backend
-go build -o app cmd/api/main.go
-./app
-```
-
-**Frontend:**
-```bash
-cd frontend
-npm run build
-serve -s build -l 3000  # requires: npm install -g serve
+# Runs at http://localhost:3000
 ```
 
 ---
 
 ## Running Tests
 
-### Backend Unit Tests
+### Backend unit tests
 
 ```bash
 cd backend
-
-# Run all tests
 go test ./tests/services/... -v
-
-# Run with coverage
 go test ./tests/services/... -v -cover -coverpkg=./internal/services/...
-
-# Generate HTML coverage report
 go test ./tests/services/... -coverprofile=coverage.out -coverpkg=./internal/services/...
 go tool cover -html=coverage.out
-
-# Coverage summary in terminal
 go tool cover -func=coverage.out
 ```
 
-Expected output:
-```
-=== RUN   TestRegister_Success
---- PASS: TestRegister_Success (0.00s)
-...
-PASS
-coverage: 86.5% of statements in ./internal/services
-ok      forum-app-cloud-deploy/tests/services     0.537s
-```
+Expected: all 47 tests pass, coverage ≥97%.
 
-### Frontend Unit Tests
+### Frontend unit tests
 
 ```bash
 cd frontend
-
-# Run once
 npm test -- --watchAll=false
-
-# Run with coverage
 npm test -- --coverage --watchAll=false
-
-# Open HTML coverage report
-open coverage/lcov-report/index.html
 ```
 
-Expected output:
-```
-Test Suites: 8 passed, 8 total
-Tests:       39 passed, 39 total
-Coverage:    92.44% statements
-```
+Expected: 47 tests pass, coverage ≥97%.
 
-### E2E Tests — Cypress
+### E2E tests — Cypress
 
-> Backend and frontend must be running before executing Cypress tests.
+> Backend and frontend must be running first.
 
 ```bash
-# Terminal 1: backend
-cd backend && go run cmd/api/main.go
-
-# Terminal 2: frontend
-cd frontend && npm start
-
-# Terminal 3: Cypress
 cd frontend
-
-# Interactive mode
-npx cypress open
-
-# Headless mode (used in CI/CD)
-npx cypress run
+npx cypress run      # headless
+npx cypress open     # interactive
 ```
 
-Expected output:
-```
-Running:  auth.cy.js        (1 of 4)  ✓ 5 tests passing
-Running:  posts.cy.js       (2 of 4)  ✓ 5 tests passing
-Running:  comments.cy.js    (3 of 4)  ✓ 4 tests passing
-Running:  full-flow.cy.js   (4 of 4)  ✓ 1 test passing
-
-Total: 15 tests passing
-```
+Expected: 15 tests pass across 4 spec files.
 
 ---
 
 ## Quality Tools
 
-### SonarCloud (Static Analysis)
+### SonarCloud
 
 ```
-URL: https://sonarcloud.io/project/overview?id=CarpinetiOctavio_forum-app-cloud-deploy
-Organization: carpinetioctavio
+https://sonarcloud.io/project/overview?id=CarpinetiOctavio_forum-app-cloud-deploy
 ```
 
-Local analysis (optional):
+### Code coverage
+
 ```bash
-docker run --rm \
-  -e SONAR_HOST_URL="https://sonarcloud.io" \
-  -e SONAR_TOKEN="your-token" \
-  -v "$(pwd):/usr/src" \
-  sonarsource/sonar-scanner-cli
-```
-
-### Code Coverage
-
-**Backend:**
-```bash
+# Backend
 cd backend
 go test ./tests/services/... -coverprofile=coverage.out -coverpkg=./internal/services/...
 go tool cover -func=coverage.out | grep total
-go tool cover -html=coverage.out
-```
 
-**Frontend:**
-```bash
+# Frontend
 cd frontend
 npm test -- --coverage --watchAll=false
-open coverage/lcov-report/index.html
 ```
 
 ---
 
 ## CI/CD Pipeline
 
-The pipeline runs automatically on every push or pull request to `main`.
+The pipeline triggers automatically on every push to `main`.
 
-**Stages:**
-1. Backend unit tests + coverage
-2. Frontend unit tests + coverage
+**Stage order:**
+1. Backend unit tests + coverage gate (≥70%)
+2. Frontend unit tests + coverage gate (≥70%)
 3. SonarCloud static analysis
 4. Cypress E2E tests
 5. Docker image build (multi-stage)
-6. Push to GitHub Container Registry (`ghcr.io`) — tagged with commit SHA
+6. Push to ghcr.io — tagged with commit SHA
 7. Deploy to QA (Render) — automatic
 8. Manual approval gate
 9. Deploy to PROD (Render) — requires explicit approval
 
-**Quality gates — pipeline aborts if:**
-- Backend coverage < 70%
-- Frontend coverage < 70%
-- SonarCloud Quality Gate fails
-- Any unit test fails
-- Any E2E test fails
+If any of stages 1–4 fails, the pipeline aborts. No image is built and nothing is deployed.
 
 **Trigger pipeline manually:**
 ```bash
 git commit --allow-empty -m "chore: trigger pipeline"
-git push
+git push origin main
 ```
 
 ---
 
 ## Docker & Cloud Deploy
 
-### Building Images Locally
+### Building images locally
 
 ```bash
-# Backend
 docker build -t forum-backend ./backend
-
-# Frontend
 docker build -t forum-frontend ./frontend
 ```
+
+> **Apple Silicon note:** when pushing to ghcr.io manually, build with `--platform linux/amd64` — Render runs on amd64 and rejects arm64 images.
 
 ### Environments
 
@@ -344,16 +300,15 @@ docker build -t forum-frontend ./frontend
 | Service | Render.com | Render.com |
 | Docker image | Same image (same SHA tag) | Same image (same SHA tag) |
 | Deploy | Automatic on passing tests | Requires manual approval |
-| Resources | Minimal | Standard |
 | Credentials | QA environment variables | PROD environment variables |
 
-### Image Versioning
+### Image versioning
 
-Images are tagged with the Git commit SHA (`${{ github.sha }}`), not `latest`. This ensures full traceability: every deployed image maps to an exact commit, and rollback is as simple as redeploying a previous tag.
+Images are tagged with the Git commit SHA (`${{ github.sha }}`), never `latest`. Every deployed image maps to an exact commit. Rollback is as simple as redeploying a previous tag — the image is already in the registry.
 
 ### Secrets
 
-All sensitive values (registry credentials, Render deploy hooks, database credentials) are stored as GitHub Secrets and injected at runtime. Nothing sensitive is hardcoded in Dockerfiles or workflow YAML files.
+All sensitive values are stored as GitHub Secrets scoped to their environments (`qa` and `prod`). Nothing sensitive is hardcoded in Dockerfiles, workflow files, or documentation.
 
 ---
 
@@ -362,157 +317,92 @@ All sensitive values (registry credentials, Render deploy hooks, database creden
 ```
 forum-app-cloud-deploy/
 ├── backend/
-│   ├── cmd/
-│   │   └── api/
-│   │       └── main.go                  # Server entry point
+│   ├── cmd/api/main.go                  # Server entry point
 │   ├── internal/
 │   │   ├── handlers/                    # HTTP handlers
-│   │   │   ├── auth_handler.go
-│   │   │   ├── post_handler.go
-│   │   │   └── utils.go
-│   │   ├── services/                    # Business logic (86.5% coverage)
-│   │   │   ├── auth_service.go
-│   │   │   └── post_service.go
+│   │   ├── services/                    # Business logic (97.3% coverage)
 │   │   ├── repository/                  # Data access interfaces
-│   │   │   ├── user_repository.go
-│   │   │   └── post_repository.go
 │   │   ├── models/                      # Data structures
-│   │   │   ├── users.go
-│   │   │   └── post.go
 │   │   ├── database/                    # Database configuration
-│   │   │   └── database.go
 │   │   └── router/                      # Route configuration
-│   │       └── router.go
 │   ├── tests/
-│   │   ├── services/                    # 35 unit tests
-│   │   │   ├── auth_service_test.go
-│   │   │   └── post_service_test.go
-│   │   └── mocks/
-│   │       ├── mock_user_repository.go
-│   │       └── mock_post_repository.go
+│   │   ├── services/                    # 47 unit tests
+│   │   └── mocks/                       # Test mocks
+│   ├── .env.example
 │   ├── Dockerfile                       # Multi-stage build
 │   ├── go.mod
 │   └── go.sum
-│
 ├── frontend/
 │   ├── src/
-│   │   ├── components/                  # React components (92.44% coverage)
-│   │   │   ├── Login/
-│   │   │   ├── PostList/
-│   │   │   ├── CreatePost/
-│   │   │   ├── PostDetail/
-│   │   │   ├── CommentList/
-│   │   │   └── CommentForm/
-│   │   ├── services/                    # HTTP services
-│   │   │   ├── authService.ts
-│   │   │   ├── authService.test.ts
-│   │   │   ├── postService.ts
-│   │   │   └── postService.test.ts
-│   │   ├── types/
-│   │   │   └── index.ts
-│   │   ├── App.tsx
-│   │   └── index.tsx
-│   ├── cypress/
-│   │   ├── e2e/
-│   │   │   └── blog/                    # 15 E2E tests
-│   │   │       ├── auth.cy.js
-│   │   │       ├── posts.cy.js
-│   │   │       ├── comments.cy.js
-│   │   │       └── full-flow.cy.js
-│   │   └── support/
+│   │   ├── components/                  # React components (97.64% coverage)
+│   │   └── services/                    # HTTP services
+│   ├── cypress/e2e/blog/                # 15 E2E tests
+│   ├── .env.example
 │   ├── Dockerfile                       # Multi-stage build
-│   ├── cypress.config.js
-│   ├── package.json
-│   └── package-lock.json
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yml                       # Full CI/CD pipeline
-│
+│   ├── docker-entrypoint.sh             # Runtime URL injection (see ADR-006)
+│   └── package.json
+├── .github/workflows/ci.yml             # Full CI/CD pipeline (9 stages)
 ├── docs/
-│   ├── decisions/                       # Architecture Decision Records (ADR)
-│   └── rules/                           # AI assistant operating instructions
+│   ├── decisions/                       # Architecture Decision Records (ADR-001 to ADR-008)
+│   ├── diagrams/                        # Pipeline and architecture diagrams
+│   ├── screenshots/                     # App and pipeline screenshots
+│   ├── rules/                           # AI assistant operating instructions
+│   ├── SETUP.md                         # Infrastructure setup guide
+│   └── COMMANDS.md                      # Command reference for local development and demos
 ├── sonar-project.properties
+├── CLAUDE.md
 └── README.md
 ```
+--- 
+
+## Documentation approach
+This project was developed with Claude (Anthropic) as an AI assistant. CLAUDE.md is the context file that gives the assistant the full picture of the project at the start of every session — stack, structure, essential commands, and references to the rest of the docs. It exists so that nothing has to be assumed and no decision has to be re-explained from scratch.
+
+docs/decisions/ contains eight Architecture Decision Records covering every significant technical choice made during the project: why GitHub Container Registry over Docker Hub, why commit SHA tagging over latest, how the frontend runtime URL injection works and why it was necessary, and what went wrong during the first pipeline run and how each problem was diagnosed and resolved. The intent is that anyone reading the repo — a recruiter, a collaborator, or a future version of the author — can understand not just what was built but why each decision was made, what alternatives were considered, and what the trade-offs were.
+
+docs/rules/ defines how the assistant operates within this project: what it can modify autonomously, what requires explicit approval, and what is off-limits. Every architectural change went through a plan-first-execute-second workflow, with this conversation serving as the audit log.
 
 ---
 
 ## Troubleshooting
 
 ### Backend won't start
-
 ```bash
-# Check port 8080
-lsof -i :8080
-kill -9 <PID>
-
-# Verify Go installation
-go version
-
-# Clean and reinstall dependencies
-cd backend
-rm go.sum
-go mod tidy
-go mod download
+lsof -i :8080 && kill -9 <PID>
+cd backend && rm go.sum && go mod tidy && go mod download
 ```
 
 ### Frontend won't start
-
 ```bash
-# Check port 3000
 lsof -i :3000
-
-# Clean and reinstall
-cd frontend
-rm -rf node_modules package-lock.json
-npm install
+cd frontend && rm -rf node_modules package-lock.json && npm install
 ```
 
 ### Cypress tests fail
-
 ```bash
-# Verify backend and frontend are running
-curl http://localhost:8080/api/health
-curl http://localhost:3000
-
-# Clear Cypress cache
-npx cypress cache clear
-npx cypress install
-
-# Run with verbose logs
+npx cypress cache clear && npx cypress install
 DEBUG=cypress:* npx cypress run
 ```
 
-### Pipeline fails in GitHub Actions
-
+### Pipeline fails
 ```bash
-# Check logs at: GitHub > Actions > failed run
-
-# Common causes:
-# 1. package-lock.json out of sync
-cd frontend
-rm package-lock.json
-npm install
-git add package-lock.json
-git commit -m "fix: regenerate package-lock.json"
-git push
-
-# 2. Tests failing locally — always run tests locally before pushing
+# package-lock.json out of sync
+cd frontend && rm package-lock.json && npm install
+git add package-lock.json && git commit -m "fix: regenerate package-lock.json"
 ```
 
 ---
 
 ## Metrics
 
-| Metric | Target | Result                                 | Status |
-|--------|--------|----------------------------------------|--------|
-| Backend Coverage | ≥70% | 86.5%                                  | ✅ |
-| Frontend Coverage | ≥70% | 92.44%                                 | ✅ |
-| Total Tests | — | 109 tests (47 unit + 47 Jest + 15 E2E) | ✅ |
-| SonarCloud Quality Gate | Pass | PASSED                                 | ✅ |
-| Issues Resolved | ≥3 | 47 issues                              | ✅ |
-| Code Duplications | <3% | 0.0%                                   | ✅ |
+| Metric | Target | Result | Status |
+|--------|--------|--------|--------|
+| Backend Coverage | ≥70% | 97.3% | ✅ |
+| Frontend Coverage | ≥70% | 97.64% | ✅ |
+| Total Tests | — | 109 (47 unit + 47 Jest + 15 E2E) | ✅ |
+| SonarCloud Quality Gate | Pass | PASSED | ✅ |
+| Issues Resolved | ≥3 | 47 issues | ✅ |
+| Code Duplications | <3% | 0.0% | ✅ |
 
 ---
 
