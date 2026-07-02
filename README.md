@@ -8,8 +8,7 @@
 **Course:** Software Engineering III — Universidad Católica de Córdoba (UCC)
 **Year:** 2025
 
-Full-stack forum application containerized and deployed to the cloud with a complete CI/CD pipeline. This project builds on [forum-app-qa-pipeline](https://github.com/CarpinetiOctavio/forum-app-qa-pipeline), extending it with Docker containerization, a container registry, and automated deployment to QA and production environments on Render via GitHub Actions.
-
+Full-stack forum application containerized and deployed to the cloud with a complete CI/CD pipeline. This project is the third in a series: [forum-app-ci-testing](https://github.com/CarpinetiOctavio/forum-app-ci-testing) established the unit testing foundation and GitHub Actions integration, [forum-app-qa-pipeline](https://github.com/CarpinetiOctavio/forum-app-qa-pipeline) extended that with code coverage gates, static analysis, and E2E testing, and this repository adds Docker containerization, a container registry, and automated deployment to QA and production environments on Render via GitHub Actions.
 ---
 
 ## Table of Contents
