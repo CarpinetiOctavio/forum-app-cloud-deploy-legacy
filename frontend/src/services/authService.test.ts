@@ -10,6 +10,7 @@ describe('authService', () => {
   });
 
   describe('login', () => {
+    // Calls the login API endpoint with the given credentials
     test('llama a la API correctamente con credentials', async () => {
       const mockUser = {
         id: 1,
@@ -35,6 +36,7 @@ describe('authService', () => {
       expect(result).toEqual(mockUser);
     });
 
+    // Rejects when the credentials are invalid
     test('rechaza cuando las credenciales son inválidas', async () => {
       const error = new Error('Credenciales inválidas');
       mockedAxios.post.mockRejectedValueOnce(error);
@@ -49,6 +51,7 @@ describe('authService', () => {
   });
 
   describe('register', () => {
+    // Calls the register API endpoint with the given registration data
     test('llama a la API correctamente con datos de registro', async () => {
       const mockUser = {
         id: 1,
@@ -76,6 +79,7 @@ describe('authService', () => {
       expect(result).toEqual(mockUser);
     });
 
+    // Rejects when the email is already registered
     test('rechaza cuando el email ya existe', async () => {
       const error = new Error('el email ya está registrado');
       mockedAxios.post.mockRejectedValueOnce(error);
@@ -89,6 +93,7 @@ describe('authService', () => {
       ).rejects.toEqual(error);
     });
 
+    // Rejects when server-side validation fails
     test('rechaza cuando la validación falla', async () => {
       const error = new Error('la contraseña debe tener al menos 6 caracteres');
       mockedAxios.post.mockRejectedValueOnce(error);

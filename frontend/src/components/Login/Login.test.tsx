@@ -12,6 +12,7 @@ describe('Login Component', () => {
     jest.clearAllMocks();
   });
 
+  // Renders the login form with heading, inputs, and submit button
   test('renderiza el formulario de login correctamente', () => {
     render(<Login onLoginSuccess={mockOnLoginSuccess} />);
 
@@ -26,6 +27,7 @@ describe('Login Component', () => {
     expect(screen.getByRole('button', { name: /sign in/i })).toBeInTheDocument();
   });
 
+  // Switches to the registration form when toggling mode
   test('muestra formulario de registro al cambiar modo', () => {
     render(<Login onLoginSuccess={mockOnLoginSuccess} />);
 
@@ -40,6 +42,7 @@ describe('Login Component', () => {
     expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
   });
 
+  // Successful login calls onLoginSuccess with the returned user
   test('login exitoso llama a onLoginSuccess', async () => {
     const mockUser = {
       id: 1,
@@ -69,6 +72,7 @@ describe('Login Component', () => {
     });
   });
 
+  // Shows an error message when login fails
   test('muestra error cuando login falla', async () => {
     mockedAxios.post.mockRejectedValueOnce({
       response: {
@@ -96,6 +100,7 @@ describe('Login Component', () => {
     expect(mockOnLoginSuccess).not.toHaveBeenCalled();
   });
 
+  // Disables the submit button while the request is in flight
   test('deshabilita el botón mientras está cargando', async () => {
     mockedAxios.post.mockImplementation(() => 
       new Promise(resolve => setTimeout(resolve, 100))

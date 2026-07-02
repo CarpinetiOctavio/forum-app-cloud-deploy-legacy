@@ -12,6 +12,7 @@ describe('CreatePost Component', () => {
         jest.clearAllMocks();
     });
 
+    // Renders the create-post form with title, content, and submit button
     test('renderiza el formulario correctamente', () => {
         render(<CreatePost userId={1} onPostCreated={mockOnPostCreated} />);
 
@@ -22,6 +23,7 @@ describe('CreatePost Component', () => {
         expect(screen.getByRole('button', { name: /publish post/i })).toBeInTheDocument();
     });
 
+    // Successfully creates a post and calls the onPostCreated callback
     test('crea post exitosamente', async () => {
         mockedPostService.createPost.mockResolvedValueOnce({
             id: 1,
@@ -51,6 +53,7 @@ describe('CreatePost Component', () => {
         });
     });
 
+    // Shows an error message when post creation fails
     test('muestra error cuando falla la creación', async () => {
         mockedPostService.createPost.mockRejectedValueOnce({
             response: { data: { error: 'Error al crear post' } }
@@ -69,6 +72,7 @@ describe('CreatePost Component', () => {
         expect(mockOnPostCreated).not.toHaveBeenCalled();
     });
 
+    // Disables the submit button while the request is in flight
     test('deshabilita el botón mientras está cargando', async () => {
         mockedPostService.createPost.mockImplementation(
             () => new Promise(resolve => setTimeout(resolve, 100))

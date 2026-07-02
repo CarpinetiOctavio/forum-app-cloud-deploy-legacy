@@ -12,6 +12,7 @@ describe('CommentForm Component', () => {
         jest.clearAllMocks();
     });
 
+    // Renders the comment form with textarea and submit button
     test('renderiza el formulario correctamente', () => {
         render(<CommentForm postId={1} userId={1} onCommentCreated={mockOnCommentCreated} />);
 
@@ -20,6 +21,7 @@ describe('CommentForm Component', () => {
         expect(screen.getByRole('button', { name: /^comment$/i })).toBeInTheDocument();
     });
 
+    // Successfully creates a comment and calls the onCommentCreated callback
     test('crea comentario exitosamente', async () => {
         mockedPostService.createComment.mockResolvedValueOnce({
             id: 1,
@@ -48,6 +50,7 @@ describe('CommentForm Component', () => {
         });
     });
 
+    // Shows an error message when comment creation fails
     test('muestra error cuando falla la creación', async () => {
         mockedPostService.createComment.mockRejectedValueOnce({
             response: { data: { error: 'Error al crear comentario' } }
@@ -67,6 +70,7 @@ describe('CommentForm Component', () => {
         expect(mockOnCommentCreated).not.toHaveBeenCalled();
     });
 
+    // Submit button is disabled when the textarea is empty
     test('botón deshabilitado cuando el textarea está vacío', () => {
         render(<CommentForm postId={1} userId={1} onCommentCreated={mockOnCommentCreated} />);
 

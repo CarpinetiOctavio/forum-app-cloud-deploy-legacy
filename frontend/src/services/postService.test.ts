@@ -10,6 +10,7 @@ describe('postService', () => {
     });
 
     describe('getAllPosts', () => {
+        // Fetches all posts from the API
         test('obtiene todos los posts correctamente', async () => {
             const mockPosts = [
                 { id: 1, title: 'Post 1', content: 'Content 1', user_id: 1, username: 'user1', created_at: '2024-01-01' },
@@ -25,6 +26,7 @@ describe('postService', () => {
     });
 
     describe('getPostById', () => {
+        // Fetches a single post by ID
         test('obtiene un post por ID correctamente', async () => {
             const mockPost = { id: 1, title: 'Post 1', content: 'Content 1', user_id: 1, username: 'user1', created_at: '2024-01-01' };
             mockedAxios.get.mockResolvedValueOnce({ data: mockPost });
@@ -37,6 +39,7 @@ describe('postService', () => {
     });
 
     describe('createPost', () => {
+        // Creates a new post
         test('crea un post correctamente', async () => {
             const newPost = { title: 'New Post', content: 'New Content' };
             const mockResponse = { id: 1, ...newPost, user_id: 1, username: 'user1', created_at: '2024-01-01' };
@@ -54,6 +57,7 @@ describe('postService', () => {
     });
 
     describe('deletePost', () => {
+        // Deletes a post
         test('elimina un post correctamente', async () => {
             mockedAxios.delete.mockResolvedValueOnce({ data: {} });
 
@@ -67,6 +71,7 @@ describe('postService', () => {
     });
 
     describe('createComment', () => {
+        // Creates a new comment on a post
         test('crea un comentario correctamente', async () => {
             const comment = { content: 'Great post!' };
             const mockResponse = {
@@ -91,6 +96,7 @@ describe('postService', () => {
     });
 
     describe('getComments', () => {
+        // Fetches all comments for a post
         test('obtiene comentarios de un post', async () => {
             const mockComments = [
                 { id: 1, post_id: 1, user_id: 1, username: 'user1', content: 'Comment 1', created_at: '2024-01-01' },
@@ -111,6 +117,7 @@ describe('deleteComment', () => {
         jest.clearAllMocks();
     });
 
+    // Deletes a comment
     test('elimina un comentario correctamente', async () => {
         mockedAxios.delete.mockResolvedValueOnce({ data: {} });
 

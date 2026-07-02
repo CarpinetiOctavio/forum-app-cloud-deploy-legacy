@@ -1,5 +1,9 @@
 # Forum App — Cloud Deploy
 
+[![CI/CD Pipeline](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy/actions/workflows/ci.yml/badge.svg)](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CarpinetiOctavio_forum-app-cloud-deploy&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=CarpinetiOctavio_forum-app-cloud-deploy)
+[![License: MIT](https://img.shields.io/github/license/CarpinetiOctavio/forum-app-cloud-deploy)](LICENSE)
+
 **Author:** Octavio Carpineti
 **Course:** Software Engineering III — Universidad Católica de Córdoba (UCC)
 **Year:** 2025
@@ -501,14 +505,14 @@ git push
 
 ## Metrics
 
-| Metric | Target | Result | Status |
-|--------|--------|--------|--------|
-| Backend Coverage | ≥70% | 86.5% | ✅ |
-| Frontend Coverage | ≥70% | 92.44% | ✅ |
-| Total Tests | — | 89 tests | ✅ |
-| SonarCloud Quality Gate | Pass | PASSED | ✅ |
-| Issues Resolved | ≥3 | 47 issues | ✅ |
-| Code Duplications | <3% | 0.0% | ✅ |
+| Metric | Target | Result                                 | Status |
+|--------|--------|----------------------------------------|--------|
+| Backend Coverage | ≥70% | 86.5%                                  | ✅ |
+| Frontend Coverage | ≥70% | 92.44%                                 | ✅ |
+| Total Tests | — | 109 tests (47 unit + 47 Jest + 15 E2E) | ✅ |
+| SonarCloud Quality Gate | Pass | PASSED                                 | ✅ |
+| Issues Resolved | ≥3 | 47 issues                              | ✅ |
+| Code Duplications | <3% | 0.0%                                   | ✅ |
 
 ---
 

@@ -54,12 +54,12 @@ jobs:
           fi
           echo "✅ Coverage $COVERAGE% meets threshold"
 
-      - name: Upload backend coverage
-        uses: codecov/codecov-action@v3
+      - name: Upload backend coverage artifact
+        uses: actions/upload-artifact@v4
         with:
-          files: ./backend/coverage.out
-          flags: backend
           name: backend-coverage
+          path: backend/coverage.out
+          retention-days: 1
 
   frontend-tests:
     name: Frontend Tests (React)
@@ -92,12 +92,12 @@ jobs:
           npm test -- --coverage --watchAll=false
           echo "📊 Frontend Coverage Report Generated"
 
-      - name: Upload frontend coverage
-        uses: codecov/codecov-action@v3
+      - name: Upload frontend coverage artifact
+        uses: actions/upload-artifact@v4
         with:
-          files: ./frontend/coverage/coverage-final.json
-          flags: frontend
           name: frontend-coverage
+          path: frontend/coverage/lcov.info
+          retention-days: 1
 
   sonarcloud:
     name: SonarCloud Analysis
@@ -110,29 +110,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
+      - name: Download backend coverage artifact
+        uses: actions/download-artifact@v4
         with:
-          go-version: '1.24'
+          name: backend-coverage
+          path: backend
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download frontend coverage artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: '22'
-
-      - name: Install frontend dependencies
-        working-directory: ./frontend
-        run: npm ci
-
-      - name: Run backend tests for coverage
-        working-directory: ./backend
-        run: |
-          go mod download
-          go test ./tests/services/... -v -cover -coverpkg=./internal/services/... -coverprofile=coverage.out
-
-      - name: Run frontend tests for coverage
-        working-directory: ./frontend
-        run: npm test -- --coverage --watchAll=false
+          name: frontend-coverage
+          path: frontend/coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v5.0.0

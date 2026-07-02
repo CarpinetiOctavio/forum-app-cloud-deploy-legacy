@@ -134,6 +134,35 @@ USER appuser
 
 ---
 
+### (e) Render API key hardcoded in docs/COMMANDS.md
+
+**Problem:** The Render API key used for manual PROD rollback instructions
+(`docs/COMMANDS.md`, section 10 — "Rollback in Render") was committed in
+plain text as a real value (`export RENDER_API_KEY="rnd_..."`) instead of a
+placeholder. Since the repository remote is public, the key was exposed to
+anyone with read access from the commit that introduced it onward.
+
+**Root cause:** The rollback instructions were written with a real API key
+value pasted in for a "verified, copy-pasteable" example, rather than a
+placeholder. No secret-scanning step in the pipeline or pre-commit hook
+caught the plain-text credential before it was pushed.
+
+**Fix:**
+- Replaced the hardcoded value with a placeholder in `docs/COMMANDS.md`:
+  ```bash
+  export RENDER_API_KEY="your-render-api-key"
+  ```
+- Rotated (regenerated) the exposed API key in the Render dashboard,
+  invalidating the leaked value regardless of its continued presence in
+  git history.
+- Updated the corresponding GitHub Actions secret (`RENDER_API_KEY`) used
+  by the `deploy-qa` and `deploy-prod` jobs with the new key value.
+
+**Detected during:** manual code review ahead of using this repository as a
+professional portfolio piece, not by any automated pipeline gate.
+
+---
+
 ## Alternatives considered
 
 | Alternative | Reason not chosen |
@@ -149,3 +178,6 @@ USER appuser
 - Both ghcr.io packages must remain linked to the repository for `GITHUB_TOKEN` to push successfully in future pipeline runs.
 - The backend container runs as `appuser` — any future feature that requires writing to the filesystem must ensure the target path is writable by that user.
 - `/app` is owned by `appuser:appgroup` in the final image — SQLite can create `database.db` there both in local runs and on Render.
+- `docs/COMMANDS.md` must only ever contain placeholder credential values —
+  no real key, even for a "verified working example", is committed to a
+  file tracked by Git.
