@@ -1,8 +1,37 @@
 # Forum App — Cloud Deploy
 
-[![CI/CD Pipeline](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy/actions/workflows/ci.yml/badge.svg)](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy/actions/workflows/ci.yml)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CarpinetiOctavio_forum-app-cloud-deploy&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=CarpinetiOctavio_forum-app-cloud-deploy)
-[![License: MIT](https://img.shields.io/github/license/CarpinetiOctavio/forum-app-cloud-deploy)](LICENSE)
+> **⚠️ Superseded** (2026-08-04). This repository reflects the real TP8
+> submission as built in July 2026 for Software Engineering III at UCC —
+> unlike this series' TP7 predecessor, it was not a raw, untouched academic
+> mirror when work on it stopped; it already carried real ADRs, rules
+> files, and documentation of its own.
+>
+> This repository has been superseded by
+> [`forum-app-cloud-deploy`](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy),
+> built as a clean copy of `forum-app-qa-pipeline@v1.0.0` rather than
+> continued from this codebase. See
+> [`ADR-000`](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy/blob/main/docs/decisions/ADR-000-starting-from-qa-pipeline-v1.0.0.md)
+> in that repository for the full reasoning behind that decision — in
+> short: this repository's backend never actually descended from
+> `qa-pipeline@v1.0.0` despite its own docs claiming otherwise, it predates
+> `ci-testing`'s own security hardening, and its `EditPost`/`EditComment`
+> functionality never existed here at all. This repository is kept
+> archived, untouched, as the reference the two audits behind that
+> decision — [`cloud-deploy-legacy-audit-results.md`](docs/audits/cloud-deploy-legacy-audit-results.md)
+> and [`cloud-deploy-legacy-transferable-knowledge-results.md`](docs/audits/cloud-deploy-legacy-transferable-knowledge-results.md) —
+> were run against.
+>
+> **Note on the Live Environments below**: the spoofable authentication
+> design documented in the audit above was confirmed exploitable against
+> this repository's real, deployed QA service — reproduced independently
+> twice, once by Claude and once by Octavio himself by hand. All 4 Render
+> services listed below have since been **suspended** (reversible, not
+> deleted) as a direct consequence of that finding; the links no longer
+> resolve to a running application.
+
+[![CI/CD Pipeline](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy-legacy/actions/workflows/ci.yml/badge.svg)](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy-legacy/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CarpinetiOctavio_forum-app-cloud-deploy-legacy&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=CarpinetiOctavio_forum-app-cloud-deploy-legacy)
+[![License: MIT](https://img.shields.io/github/license/CarpinetiOctavio/forum-app-cloud-deploy-legacy)](LICENSE)
 
 **Author:** Octavio Carpineti
 **Course:** Software Engineering III — Universidad Católica de Córdoba (UCC)
@@ -238,7 +267,7 @@ Expected: 15 tests pass across 4 spec files.
 ### SonarCloud
 
 ```
-https://sonarcloud.io/project/overview?id=CarpinetiOctavio_forum-app-cloud-deploy
+https://sonarcloud.io/project/overview?id=CarpinetiOctavio_forum-app-cloud-deploy-legacy
 ```
 
 ### Code coverage
