@@ -74,7 +74,7 @@ Expected: `done`. Each removed image prints its ID before `done`. If the images 
 **Clone the repository**
 ```bash
 git clone https://github.com/CarpinetiOctavio/forum-app-cloud-deploy.git
-cd forum-app-cloud-deploy
+cd forum-app-cloud-deploy-legacy
 ```
 Use when setting up the project on a new machine.
 Expected: repository cloned, `cd` puts you in the project root.
@@ -212,7 +212,7 @@ Expected output: `1` — the placeholder was replaced with the injected URL.
 **Build for linux/amd64 (required when pushing from Apple Silicon)**
 ```bash
 docker buildx build --platform linux/amd64 \
-  -t ghcr.io/carpinetioctavio/forum-app-cloud-deploy-backend:latest \
+  -t ghcr.io/carpinetioctavio/forum-app-cloud-deploy-legacy-backend:latest \
   --push ./backend
 ```
 Use when pushing images manually to ghcr.io from a Mac with M-series chip.
@@ -242,19 +242,19 @@ To re-run only the failed jobs of an existing run without pushing:
 
 **Via GitHub CLI**
 ```bash
-gh run list --repo CarpinetiOctavio/forum-app-cloud-deploy --limit 5
+gh run list --repo CarpinetiOctavio/forum-app-cloud-deploy-legacy --limit 5
 ```
 Shows the five most recent runs with their IDs and status.
 Expected: table with columns `STATUS`, `NAME`, `WORKFLOW`, `ID`.
 
 ```bash
-gh run watch <RUN_ID> --repo CarpinetiOctavio/forum-app-cloud-deploy
+gh run watch <RUN_ID> --repo CarpinetiOctavio/forum-app-cloud-deploy-legacy
 ```
 Streams live log output for the run until it completes.
 Expected: job names appear as they start; pass/fail shown inline.
 
 ```bash
-gh run view <RUN_ID> --log --repo CarpinetiOctavio/forum-app-cloud-deploy
+gh run view <RUN_ID> --log --repo CarpinetiOctavio/forum-app-cloud-deploy-legacy
 ```
 Dumps the full log of a completed run to stdout.
 
@@ -486,7 +486,7 @@ Replace `SHA_DEL_COMMIT` with the actual commit SHA (full 40-character hash).
 
 Backend PROD:
 ```bash
-curl -X POST "https://api.render.com/v1/services/srv-d8vf577lk1mc738suglg/deploys" \
+curl -X POST "https://api.render.com/v1/services/srv-xxxxxxxxxxxxxxxx/deploys" \
   -H "Authorization: Bearer $RENDER_API_KEY" \
   -H "Content-Type: application/json" \
   -d "{\"imageUrl\":\"ghcr.io/carpinetioctavio/forum-app-cloud-deploy-backend:SHA_DEL_COMMIT\"}"
@@ -494,7 +494,7 @@ curl -X POST "https://api.render.com/v1/services/srv-d8vf577lk1mc738suglg/deploy
 
 Frontend PROD:
 ```bash
-curl -X POST "https://api.render.com/v1/services/srv-d8vf69uq1p3s73b3rkvg/deploys" \
+curl -X POST "https://api.render.com/v1/services/srv-xxxxxxxxxxxxxxxx/deploys" \
   -H "Authorization: Bearer $RENDER_API_KEY" \
   -H "Content-Type: application/json" \
   -d "{\"imageUrl\":\"ghcr.io/carpinetioctavio/forum-app-cloud-deploy-frontend:SHA_DEL_COMMIT\"}"
