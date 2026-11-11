@@ -28,22 +28,22 @@
 > services listed below have since been ~~**suspended** (reversible, not deleted)~~ **deleted** (2026-11-10; see [Update](#update-2026-11-10), item 1)
 > as a direct consequence of that finding; the links no longer
 > resolve to a running application.
-
-### Update (2026-11-10)
-
-This repository was unarchived once, on 2026-11-10, to make the changes listed here, and archived again. Nothing was removed from the text: statements that are no longer true, or never were, are struck through and point to this list. The audits linked above remain the full record.
-
-1. **Render services deleted.** All 4 services were deleted on 2026-11-10; the note above said they were only suspended. The URLs in [Live Environments](#live-environments) are kept as text, no longer linked, because those subdomains can be assigned to other services.
-2. **"Issues Resolved: 47" was wrong.** SonarCloud never recorded more than 31 issues for this project, and 6 were resolved; the figure was copied from a README template ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §6).
-3. **The pipeline trigger is misstated.** It runs on pushes to `main`, `master` and `develop`, and the last two deploy to QA ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §0 and §4).
-4. **The docs describe a different deploy mechanism.** `ADR-002-hosting.md`, `deployment.md`, `pipeline.md` and `constraints.md` describe deploy hooks, and `ADR-002-hosting.md` and `deployment.md` name two services; the implementation uses Render's REST API with an account-scoped key and four services ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §0, §4 and §6).
-5. **The backend's origin is misstated.** `constraints.md` and `testing.md` say it was inherited from `qa-pipeline`; it descends from `ci-testing@v1.0.0`, without that repository's security hardening ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §2).
-6. **`testing.md` overstates the tests.** It says handlers and repositories are covered by the Cypress tests, but all 15 are mocked and never reach the backend; it also cites 89 tests, a count that matches nothing real ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §1 and §6).
-7. **Repository links corrected.** After the 2026-08-04 rename, `forum-app-cloud-deploy` is a different repository; the clone command and the repository link at the end now point here.
-8. **A real Render API key was committed** to `docs/COMMANDS.md` in `3678eb6` (2026-07-01). It was found by hand, with no automated check in place, removed from the file the same day (`b96aef5`) and rotated ([ADR-007](docs/decisions/ADR-007-deployment-issues.md), (e); [transferable knowledge](docs/audits/cloud-deploy-legacy-transferable-knowledge-results.md), §5). It is still readable in the history; every API key on that Render account was deleted on 2026-11-10.
-9. **The CI badge is red.** The [last run](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy-legacy/actions/runs/30940796014) (2026-08-04) failed in `Docker Build & Push`. Its logs have expired, so the cause can no longer be checked. The workflow was disabled on 2026-11-10, so that no push publishes images to the container packages the successor repository now uses.
-
-What still holds: the test and coverage figures in this README were re-run twice in the audit and are accurate ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §1).
+>
+> ### Update (2026-11-10)
+>
+> This repository was unarchived once, on 2026-11-10, to make the changes listed here, and archived again. Nothing was removed except the outdated repository URLs replaced in item 7; statements that are no longer true, or never were, are struck through or annotated and point to this list. The audits linked above remain the full record.
+>
+> 1. **Render services deleted.** All 4 services were deleted on 2026-11-10; the note above said they were only suspended. The URLs in [Live Environments](#live-environments) are kept as text, no longer linked, because those subdomains can be assigned to other services.
+> 2. **"Issues Resolved: 47" was wrong.** SonarCloud never recorded more than 31 issues for this project, and 6 were resolved; the figure was copied from a README template ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §6).
+> 3. **The pipeline trigger is misstated.** It runs on pushes to `main`, `master` and `develop`, and the last two deploy to QA ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §0 and §4).
+> 4. **The docs describe a different deploy mechanism.** `ADR-002-hosting.md`, `deployment.md`, `pipeline.md` and `constraints.md` describe deploy hooks, and `ADR-002-hosting.md` and `deployment.md` name two services; the implementation uses Render's REST API with an account-scoped key and four services ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §0, §4 and §6).
+> 5. **The backend's origin is misstated.** `constraints.md` and `testing.md` say it was inherited from `qa-pipeline`; it descends from `ci-testing@v1.0.0`, without that repository's security hardening ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §2).
+> 6. **`testing.md` overstates the tests.** It says handlers and repositories are covered by the Cypress tests, but all 15 are mocked and never reach the backend; it also cites 89 tests, a count that matches nothing real ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §1 and §6).
+> 7. **Repository links corrected.** After the 2026-08-04 rename, `forum-app-cloud-deploy` is a different repository; the clone command and the repository link at the end now point here.
+> 8. **A real Render API key was committed** to `docs/COMMANDS.md` in `3678eb6` (2026-07-01). It was found by hand, with no automated check in place, removed from the file the same day (`b96aef5`) and rotated ([ADR-007](docs/decisions/ADR-007-deployment-issues.md), (e); [transferable knowledge](docs/audits/cloud-deploy-legacy-transferable-knowledge-results.md), §5). It is still readable in the history; every API key on that Render account was deleted on 2026-11-10.
+> 9. **The CI badge is red.** The [last run](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy-legacy/actions/runs/30940796014) (2026-08-04) failed in `Docker Build & Push`. Its logs have expired, so the cause can no longer be checked. The workflow was disabled on 2026-11-10, so that no push publishes images to the container packages the successor repository now uses.
+>
+> What still holds: the test and coverage figures in this README were re-run twice in the audit and are accurate ([audit](docs/audits/cloud-deploy-legacy-audit-results.md), §1).
 
 [![CI/CD Pipeline](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy-legacy/actions/workflows/ci.yml/badge.svg)](https://github.com/CarpinetiOctavio/forum-app-cloud-deploy-legacy/actions/workflows/ci.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=CarpinetiOctavio_forum-app-cloud-deploy-legacy&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=CarpinetiOctavio_forum-app-cloud-deploy-legacy)
